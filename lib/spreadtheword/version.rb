@@ -1,3 +1,3 @@
-module Spreadtheword
+class Spreadtheword
   VERSION = "0.1.0"
 end

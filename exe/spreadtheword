@@ -1,14 +1,46 @@
 #!/usr/bin/env ruby
 
+# Copyright (c) 2018 Minqi Pan <pmq2001@gmail.com>
+# 
+# This file is part of spreadtheword, distributed under the MIT License
+# For full terms see the included LICENSE file
+
 require "bundler/setup"
+require 'optparse'
 require "spreadtheword"
 
-# You can add fixtures and/or initialization code here to make experimenting
-# with your gem easier. You can also use a different console, if you like.
+USAGE = %Q{
+Spread the Word (spreadtheword) v#{::Spreadtheword::VERSION}
+Automatic release note generator, with integrations with Wrike and GitLab.
+Usage
+  spreadtheword [OPTION]...
+}.strip
 
-# (If you use this, don't forget to add pry to your Gemfile!)
-# require "pry"
-# Pry.start
+options = {}
 
-require "irb"
-IRB.start(__FILE__)
+outer_opts = nil
+
+usage = lambda do |out|
+  out.puts outer_opts
+end
+
+OptionParser.new do |opts|
+  opts.banner = USAGE
+
+  opts.on("-v", "--version", "Prints the version of rubyc and exit") do
+    puts ::Spreadtheword::VERSION
+    exit 0
+  end
+
+  opts.on("-h", "--help", "Prints this help and exit") do
+    usage.call(STDOUT)
+    STDOUT.puts
+    STDOUT.puts EXAMPLES
+    exit 0
+  end
+
+  outer_opts = opts
+end.parse!
+
+instance = ::Spreadtheword.new options
+instance.run!

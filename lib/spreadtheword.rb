@@ -1,5 +1,10 @@
 require "spreadtheword/version"
 
-module Spreadtheword
-  # Your code goes here...
+class Spreadtheword
+  def initialize options
+    
+  end
+
+  def run!
+  end
 end

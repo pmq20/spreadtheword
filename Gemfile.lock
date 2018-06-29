@@ -16,6 +16,7 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
+    coderay (1.1.2)
     concurrent-ruby (1.0.5)
     faraday (0.15.2)
       multipart-post (>= 1.2, < 3)
@@ -51,6 +52,7 @@ GEM
       multi_json (~> 1.10)
     memoist (0.16.0)
     metaclass (0.0.4)
+    method_source (0.9.0)
     mime-types (3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
@@ -61,6 +63,9 @@ GEM
     multi_xml (0.6.0)
     multipart-post (2.0.0)
     os (0.9.6)
+    pry (0.11.3)
+      coderay (~> 1.1.0)
+      method_source (~> 0.9.0)
     public_suffix (3.0.2)
     rake (10.5.0)
     shoulda (3.5.0)
@@ -91,6 +96,7 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.16)
+  pry (~> 0.11.3)
   rake (~> 10.0)
   spreadtheword!
 
