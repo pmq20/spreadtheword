@@ -4,7 +4,7 @@
 <a href="https://travis-ci.org/pmq20/spreadtheword">
   <img alt="Build Status" src="https://travis-ci.org/pmq20/spreadtheword.svg?branch=master" />
 </a>
-<a href="https://ci.appveyor.com/project/pmq20/spreadtheword">
+<a href="https://ci.appveyor.com/project/pmq20/spreadtheword/branch/master">
   <img alt="Build Status" src="https://ci.appveyor.com/api/projects/status/xdb4p03gvrjr0m6m?svg=true" />
 </a>
 <a href="https://codecov.io/gh/pmq20/spreadtheword">
