@@ -1,5 +1,5 @@
 <h1 align="center" style="border-bottom: none;">Spread the Word</h1>
-<h3 align="center">Automatic release note generator, with integrations with Wrike and GitLab</h3>
+<h3 align="center">Automatically generates a release-note document of LaTeX based on git commit messages, with integrations with Wrike, GitLab and Google Translate</h3>
 <p align="center">
 <a href="https://travis-ci.org/pmq20/spreadtheword">
   <img alt="Build Status" src="https://travis-ci.org/pmq20/spreadtheword.svg?branch=master" />
@@ -23,6 +23,14 @@
 
 ## Usage
 
+    spreadtheword [OPTION]...
+      -v, --version                    Prints the version of rubyc and exit
+      -h, --help                       Prints this help and exit
+          --root=DIR                   The path to the root of your project. Default: current directory
+          --title=STRING               Specifies the title of the output document. Default: "Relase Notes"
+          --author=STRING              Specifies the author of the output document. Default: user.name of git config
+          --wrike-id=STRING            Specifies the OAuth Client ID of your Wrike API app.
+          --wrike-token=STRING         Specifies the access token of your Wrike API app.
 
 ## License
 

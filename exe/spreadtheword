@@ -7,16 +7,17 @@
 
 require "bundler/setup"
 require 'optparse'
+require "ostruct"
 require "spreadtheword"
 
 USAGE = %Q{
 Spread the Word (spreadtheword) v#{::Spreadtheword::VERSION}
-Automatic release note generator, with integrations with Wrike and GitLab.
+Automatically generates a release-note document of LaTeX based on git commit messages, with integrations with Wrike, GitLab and Google Translate.
 Usage
   spreadtheword [OPTION]...
 }.strip
 
-options = {}
+options = OpenStruct.new
 
 outer_opts = nil
 
@@ -35,8 +36,27 @@ OptionParser.new do |opts|
   opts.on("-h", "--help", "Prints this help and exit") do
     usage.call(STDOUT)
     STDOUT.puts
-    STDOUT.puts EXAMPLES
     exit 0
+  end
+  
+  opts.on("--root=DIR", "The path to the root of your project. Default: current directory") do |x|
+    options.root = x
+  end
+
+  opts.on("--title=STRING", 'Specifies the title of the output document. Default: "Relase Notes"') do |x|
+    options.title = x
+  end
+
+  opts.on("--author=STRING", "Specifies the author of the output document. Default: user.name of git config") do |x|
+    options.author = x
+  end
+
+  opts.on("--wrike-id=STRING", "Specifies the OAuth Client ID of your Wrike API app.") do |x|
+    options.wrikeId = x
+  end
+
+  opts.on("--wrike-token=STRING", "Specifies the access token of your Wrike API app.") do |x|
+    options.wrikeToken = x
   end
 
   outer_opts = opts
