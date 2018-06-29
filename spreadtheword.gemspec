@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Minqi Pan"]
   spec.email         = ["pmq2001@gmail.com"]
 
-  spec.summary       = %q{Automatically generates a release-note document of LaTeX based on git commit messages, with integrations with Wrike, GitLab and Google Translate.}
-  spec.description   = %q{Automatically generates a release-note document of LaTeX based on git commit messages, with integrations with Wrike, GitLab and Google Translate.}
+  spec.summary       = %q{Automatically generates a release-note document of LaTeX format based on git commit messages.}
+  spec.description   = %q{Automatically generates a release-note document of LaTeX format based on git commit messages.}
   spec.homepage      = "https://github.com/pmq20/spreadtheword"
   spec.license       = "MIT"
 

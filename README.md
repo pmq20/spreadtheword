@@ -1,5 +1,5 @@
 <h1 align="center" style="border-bottom: none;">Spread the Word</h1>
-<h3 align="center">Automatically generates a release-note document of LaTeX based on git commit messages, with integrations with Wrike, GitLab and Google Translate</h3>
+<h3 align="center">Automatically generates a release-note document of LaTeX format based on git commit messages</h3>
 <p align="center">
 <a href="https://travis-ci.org/pmq20/spreadtheword">
   <img alt="Build Status" src="https://travis-ci.org/pmq20/spreadtheword.svg?branch=master" />
@@ -20,6 +20,11 @@
   <img alt="Percentage of issues still open" src="http://isitmaintained.com/badge/open/pmq20/spreadtheword.svg" />
 </a>
 </p>
+
+## Features
+
+* Integrates with Wrike and GitLab to fetch developement task titles
+* Integrates with Google Translate to automatically translate messages to English
 
 ## Usage
 
