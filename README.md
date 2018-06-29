@@ -1,5 +1,5 @@
 <h1 align="center" style="border-bottom: none;">Spread the Word</h1>
-<h3 align="center">Generate a release-note document of LaTeX format based on git commit messages</h3>
+<h3 align="center">Automatically generate a release-note document based on git commit messages</h3>
 <p align="center">
 <a href="https://travis-ci.org/pmq20/spreadtheword">
   <img alt="Build Status" src="https://travis-ci.org/pmq20/spreadtheword.svg?branch=master" />
@@ -25,6 +25,7 @@
 
 * Integrates with Wrike and GitLab to fetch developement task titles
 * Integrates with Google Translate to automatically translate messages to English
+* Multiple output formats are supported, e.g. LaTeX
 
 ## Usage
 

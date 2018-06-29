@@ -12,7 +12,7 @@ require "spreadtheword"
 
 USAGE = %Q{
 Spread the Word (spreadtheword) v#{::Spreadtheword::VERSION}
-Generate a release-note document of LaTeX format based on git commit messages.
+Automatically generate a release-note document based on git commit messages.
 Usage
   spreadtheword [OPTION]...
 }.strip
