@@ -20,7 +20,7 @@ class Spreadtheword
 
     configureGitlab(options) if options.gitlabToken
     configureWrike(options) if options.wrikeToken
-    configureGoogleTranslate(options) if options.googleTranslate
+    configureGoogleTranslate(options) if options.googleTranslateKey
 
     @utils = Utils.new(options)
     @logs = []
@@ -47,7 +47,7 @@ class Spreadtheword
   end
 
   def configureGoogleTranslate(options)
-    @translate = Google::Cloud::Translate.new
+    @translate = Google::Cloud::Translate.new(key: options.googleTranslateKey)
     @translateCache = {}
   end
 
