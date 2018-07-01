@@ -112,7 +112,7 @@ _
       end.uniq
       uniqM.each do |x|
         ret += %Q_
-\\item #{escape x[:commit].msg}
+\\item #{escape x}
 _
       end      
       ret += %Q_
