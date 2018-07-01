@@ -31,11 +31,14 @@
 ## Usage
 
     spreadtheword [PROJECT 1] [PROJECT 2]...[PROJECT N] [OPTION 1] [OPTION 2]...[OPTION N]
-      -v, --version                    Prints the version of spreadtheword and exit
+          --author=STRING              Specifies the author of the output document. Default: user.name of git config
       -h, --help                       Prints this help and exit
+          --gitlab-endpoint=URL        Specifies GitLab API endpoint URL.
+          --gitlab-token=STRING        Specifies the OAuth access token of your GitLab.
+          --quiet                      If present, spreadtheword would not output anything to stderr.
           --since=TAG/COMMIT-SHA1      Specifies the begining from which the git commits will be fetched. Default: the first commit
           --title=STRING               Specifies the title of the output document. Default: "Relase Notes"
-          --author=STRING              Specifies the author of the output document. Default: user.name of git config
+      -v, --version                    Prints the version of spreadtheword and exit
           --wrike-id=STRING            Specifies the OAuth Client ID of your Wrike API app.
           --wrike-token=STRING         Specifies the access token of your Wrike API app.
 
@@ -44,6 +47,19 @@
 * If no projects were provided, the current directory would be used as the sole project directory;
 * If multiple projects were provided, the git commit messages of those projects would be merged;
 * If no options were specified, their default (see below) will be used.
+
+## Example
+
+    spreadtheword                                     \
+      /projects/X                                     \
+      /projects/Y                                     \
+      --since=v1.5                                    \
+      --title="Your Project v1.6 Release Notes"       \
+      --gitlab-endpoint="https://example.net/api/v4"  \
+      --gitlab-token="XXX"                            \
+      --wrike-id="XXX"                                \
+      --wrike-token="XXX"                             \
+      > v1.6.tex
 
 ## License
 

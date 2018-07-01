@@ -42,15 +42,26 @@ end
 OptionParser.new do |opts|
   opts.banner = USAGE
 
-  opts.on("-v", "--version", "Prints the version of spreadtheword and exit") do
-    puts ::Spreadtheword::VERSION
-    exit 0
+  opts.on("--author=STRING", "Specifies the author of the output document. Default: user.name of git config") do |x|
+    options.author = x
   end
 
   opts.on("-h", "--help", "Prints this help and exit") do
     usage.call(STDOUT)
     STDOUT.puts
     exit 0
+  end
+
+  opts.on("--gitlab-endpoint=URL", "Specifies GitLab API endpoint URL.") do |x|
+    options.gitlabEndpoint = x
+  end
+
+  opts.on("--gitlab-token=STRING", "Specifies the OAuth access token of your GitLab.") do |x|
+    options.gitlabToken = x
+  end
+
+  opts.on("--quiet", "If present, spreadtheword would not output anything to stderr.") do
+    options.quiet = true
   end
 
   opts.on("--since=TAG/COMMIT-SHA1", 'Specifies the begining from which the git commits will be fetched. Default: the first commit') do |x|
@@ -61,8 +72,9 @@ OptionParser.new do |opts|
     options.title = x
   end
 
-  opts.on("--author=STRING", "Specifies the author of the output document. Default: user.name of git config") do |x|
-    options.author = x
+  opts.on("-v", "--version", "Prints the version of spreadtheword and exit") do
+    puts ::Spreadtheword::VERSION
+    exit 0
   end
 
   opts.on("--wrike-id=STRING", "Specifies the OAuth Client ID of your Wrike API app.") do |x|

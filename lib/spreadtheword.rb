@@ -1,6 +1,9 @@
-require "spreadtheword/version"
-require "spreadtheword/latex"
-require "ostruct"
+require 'ostruct'
+require 'wrike3'
+require 'gitlab'
+require 'spreadtheword/version'
+require 'spreadtheword/utils'
+require 'spreadtheword/latex'
 
 class Spreadtheword
   CONNECTOR = '__spreadtheword__'
@@ -10,7 +13,28 @@ class Spreadtheword
     @title = options.title ? options.title : 'Relase Notes'
     @author = options.author ? options.author : gitUserName
     @since = options.since
+
+    configureGitlab(options) if options.gitlabEndpoint
+    configureWrike(options) if options.wrikeId
+
+    @utils = Utils.new(options)
     @topics = {}
+  end
+
+  def configureGitlab(options)
+    Gitlab.configure do |config|
+      config.endpoint       = options.gitlabEndpoint
+      config.private_token  = options.gitlabToken
+    end
+    @gitlabCache = {}
+  end
+
+  def configureWrike(options)
+    Wrike3.configure do |config|
+      config.access_token  = options.wrikeToken
+    end
+    @wrike = Wrike3()
+    @wrikeCache = {}
   end
 
   def run!
@@ -23,9 +47,12 @@ class Spreadtheword
   def fetchAllLogs
     [].tap do |ret|
       @projects.each do |project|
+        @utils.say "Fetching git commit logs from #{project}"
         Dir.chdir(project) do
           ret.concat fetchLogs
+          @utils.say "."
         end
+        @utils.say "\n"
       end
     end
   end
