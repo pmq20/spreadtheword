@@ -5,22 +5,37 @@ require "ostruct"
 class Spreadtheword
   CONNECTOR = '__spreadtheword__'
 
-  def initialize(options)
-    @root = options.root ? options.root : Dir.pwd
+  def initialize(projects, options)
+    @projects = projects.any? ? projects : [Dir.pwd]
     @title = options.title ? options.title : 'Relase Notes'
     @author = options.author ? options.author : gitUserName
+    @since = options.since
     @topics = {}
   end
 
   def run!
-    Dir.chdir(@root) do
-      cmd = %Q{git log --pretty=format:"%an__spreadtheword__%s"}
-      logs = `#{cmd}`.to_s.split("\n")
-      logs = structure(logs)
-      parseTopics(logs)
-      writer = Spreadtheword::LaTeX.new(@title, @author, @topics)
-      writer.write!
+    logs = structure(fetchAllLogs)
+    parseTopics(logs)
+    writer = Spreadtheword::LaTeX.new(@title, @author, @topics)
+    writer.write!
+  end
+
+  def fetchAllLogs
+    [].tap do |ret|
+      @projects.each do |project|
+        Dir.chdir(project) do
+          ret.concat fetchLogs
+        end
+      end
     end
+  end
+
+  def fetchLogs
+    cmd = %Q{git log --pretty=format:"%an__spreadtheword__%s"}
+    if @since
+      cmd = %Q{#{cmd} #{@since}..master}
+    end
+    logs = `#{cmd}`.to_s.split("\n")
   end
 
   def structure(logs)

@@ -14,8 +14,21 @@ USAGE = %Q{
 Spread the Word (spreadtheword) v#{::Spreadtheword::VERSION}
 Automatically generate a release-note document based on git commit messages.
 Usage
-  spreadtheword [OPTION]...
+  spreadtheword [PROJECT 1] [PROJECT 2]...[PROJECT N] [OPTION 1] [OPTION 2]...[OPTION N]
+  If no projects were provided, the current directory would be used as the sole project directory.
+  If multiple projects were provided, the git commit messages of those projects would be merged.
+
 }.strip
+
+projects = []
+ARGV.keep_if do |x|
+  if '-' == x[0]
+    true
+  else
+    projects << x.dup
+    false
+  end
+end
 
 options = OpenStruct.new
 
@@ -38,9 +51,9 @@ OptionParser.new do |opts|
     STDOUT.puts
     exit 0
   end
-  
-  opts.on("--root=DIR", "The path to the root of your project. Default: current directory") do |x|
-    options.root = x
+
+  opts.on("--since=TAG/COMMIT-SHA1", 'Specifies the begining from which the git commits will be fetched. Default: the first commit') do |x|
+    options.since = x
   end
 
   opts.on("--title=STRING", 'Specifies the title of the output document. Default: "Relase Notes"') do |x|
@@ -62,5 +75,5 @@ OptionParser.new do |opts|
   outer_opts = opts
 end.parse!
 
-instance = ::Spreadtheword.new options
+instance = ::Spreadtheword.new projects, options
 instance.run!
