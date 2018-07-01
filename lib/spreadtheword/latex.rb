@@ -107,9 +107,12 @@ _
 
 \\begin{enumerate}
       _
-      v.each do |x|
+      uniqM = v.map do |x|
+        x[:commit].msg
+      end.uniq
+      uniqM.each do |x|
         ret += %Q_
-#{escape x[:commit].msg}
+\\item #{escape x[:commit].msg}
 _
       end      
       ret += %Q_
