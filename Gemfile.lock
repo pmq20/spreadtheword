@@ -4,6 +4,7 @@ PATH
     spreadtheword (0.1.0)
       gitlab (~> 4.3.0)
       google-cloud-translate (~> 1.2)
+      pry (~> 0.11.3)
       wrike3 (~> 0.4.0)
 
 GEM
@@ -97,7 +98,6 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.16)
-  pry (~> 0.11.3)
   rake (~> 10.0)
   spreadtheword!
 
