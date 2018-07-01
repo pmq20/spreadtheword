@@ -23,6 +23,7 @@ class Spreadtheword
     configureGoogleTranslate(options) if options.googleTranslate
 
     @utils = Utils.new(options)
+    @logs = []
     @topics = {}
   end
 
@@ -104,7 +105,6 @@ class Spreadtheword
   end
 
   def fetchAllLogs
-    @logs = []
     @projects.each do |project|
       if @gitlab
         gitlabSetCurrentProject
@@ -125,7 +125,7 @@ class Spreadtheword
     logs.delete_if do |x|
       x.nil? || '' == x.to_s.strip
     end
-    logs.map do |x|
+    logs.map! do |x|
       contents = x.split(CONNECTOR)
       if contents[1].nil? || '' == contents[1].to_s.strip
         contents[1] = ''
@@ -143,10 +143,11 @@ class Spreadtheword
         end
       end
     end
+    @logs.concat logs
   end
 
-  def parseTopics(logs)
-    logs.each do |x|
+  def parseTopics
+    @logs.each do |x|
       origin = :plain
       identifier = nil
       payload = nil
