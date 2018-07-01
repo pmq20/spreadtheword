@@ -1,3 +1,5 @@
+require 'nokogiri'
+
 class Spreadtheword::LaTeX
   def initialize title, author, topics
     @title = title

@@ -9,6 +9,7 @@ require 'google/cloud/translate'
 
 class Spreadtheword
   CONNECTOR = '__spreadtheword__'
+  NONASCII = /[^\u0000-\u007F]+/
 
   def initialize(projects, options)
     @projects = projects.any? ? projects : [Dir.pwd]
@@ -109,7 +110,7 @@ class Spreadtheword
       OpenStruct.new.tap do |y|
         y.author = contents[0]
         y.origMsg = contents[1]
-        if y.origMsg
+        if y.origMsg =~ NONASCII
           y.msg = getTranslation(contents[1]).text
         else
           y.msg = y.origMsg
@@ -120,17 +121,27 @@ class Spreadtheword
 
   def parseTopics(logs)
     logs.each do |x|
+      origin = :plain
+      identifier = nil
+      payload = nil
       title = 'Others'
-      topic = {}
       if x.origMsg =~ /\{(.*)#(\d+)\}/
       elsif x.origMsg =~ /\{#(\d+)\}/
       elsif x.orgMsg = ~ /\{W#(\d+)\}/
-        topic = getWrike($1)
+        origin = :wrike
+        identifier = "W#{$1}"
+        payload = getWrike($1)
+        title = payload['title']
       end
-      @topics[title] ||= []
-      @topics[title] << {
+      if @translate && title =~ NONASCII
+        title = getTranslation(title).text
+      end
+      @topics[identifier] ||= []
+      @topics[identifier] << {
+        origin: origin
         commit: x,
-        topic: topic,
+        payload: payload,
+        title: title,
       }
     end
   end
