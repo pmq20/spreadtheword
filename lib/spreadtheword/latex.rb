@@ -37,6 +37,9 @@ class Spreadtheword::LaTeX
 \\author{#{@author}}
 \\begin{document}
 \\maketitle
+\\setcounter{tocdepth}{1}
+\\tableofcontents
+\\newpage
 #{sections}
 \\end{document}
     _
@@ -98,7 +101,7 @@ _
 _
     developers.each do |k,v|
       ret += %Q_
-      \\item #{escape k} ($#{v.size*100.0 / values.size}\\%$)
+      \\item #{escape k} ($#{v.size*100 / values.size}\\%$)
       _
     end
     ret += %Q_
@@ -108,20 +111,13 @@ _
       ret += %Q_
 \\subsection{#{escape k}'s Commit Messages}
 
-
-\\begin{enumerate}
       _
       uniqM = v.map do |x|
         x[:commit].msg
       end.uniq
       uniqM.each do |x|
-        ret += %Q_
-\\item #{escape x}
-_
-      end      
-      ret += %Q_
-\\end{enumerate}
-      _
+        ret += "#{escape x}.\n"
+      end
     end
     ret
   end
