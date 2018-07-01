@@ -77,7 +77,7 @@ class Spreadtheword
       task = @wrike.task.details taskId
       @utils.say "."
       @wrikeCache[wId] = task['data'][0]
-      @wrikeCache[wId].spreadthewordPermalink = permalink
+      @wrikeCache[wId][:spreadthewordPermalink] = permalink
       @utils.say "\n"
     end
     return @wrikeCache[wId]

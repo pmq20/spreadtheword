@@ -60,7 +60,7 @@ class Spreadtheword::LaTeX
       elsif :wrike == first[:origin]
         title = first[:title]
         description = Nokogiri::HTML(first[:payload]['description'].gsub('<br />', "\n\n")).text
-        url = first[:payload].spreadthewordPermalink
+        url = first[:payload][:spreadthewordPermalink]
       end
       ret += %Q_
 \\section{#{escape title}}
