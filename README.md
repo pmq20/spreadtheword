@@ -31,9 +31,6 @@
 ## Usage
 
     spreadtheword [PROJECT 1] [PROJECT 2]...[PROJECT N] [OPTION 1] [OPTION 2]...[OPTION N]
-    * If no projects were provided, the current directory would be used as the sole project directory;
-    * If multiple projects were provided, the git commit messages of those projects would be merged;
-    * If no options were specified, their default (see below) will be used.
       -v, --version                    Prints the version of spreadtheword and exit
       -h, --help                       Prints this help and exit
           --since=TAG/COMMIT-SHA1      Specifies the begining from which the git commits will be fetched. Default: the first commit
@@ -42,6 +39,11 @@
           --wrike-id=STRING            Specifies the OAuth Client ID of your Wrike API app.
           --wrike-token=STRING         Specifies the access token of your Wrike API app.
 
+## Notes
+
+* If no projects were provided, the current directory would be used as the sole project directory;
+* If multiple projects were provided, the git commit messages of those projects would be merged;
+* If no options were specified, their default (see below) will be used.
 
 ## License
 

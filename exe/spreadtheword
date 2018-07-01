@@ -13,11 +13,12 @@ require "spreadtheword"
 USAGE = %Q{
 Spread the Word (spreadtheword) v#{::Spreadtheword::VERSION}
 Automatically generate a release-note document based on git commit messages.
-Usage
-  spreadtheword [PROJECT 1] [PROJECT 2]...[PROJECT N] [OPTION 1] [OPTION 2]...[OPTION N]
+Notes
   * If no projects were provided, the current directory would be used as the sole project directory;
   * If multiple projects were provided, the git commit messages of those projects would be merged;
   * If no options were specified, their default (see below) will be used.
+Usage
+  spreadtheword [PROJECT 1] [PROJECT 2]...[PROJECT N] [OPTION 1] [OPTION 2]...[OPTION N]
 }.strip
 
 projects = []
