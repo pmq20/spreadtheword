@@ -1,4 +1,5 @@
 require 'ostruct'
+require 'active_support/all'
 require 'wrike3'
 require 'gitlab'
 require 'spreadtheword/version'

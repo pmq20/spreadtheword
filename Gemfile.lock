@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     spreadtheword (0.1.0)
+      activesupport (~> 5.2)
       gitlab (~> 4.3.0)
       google-cloud-translate (~> 1.2)
       pry (~> 0.11.3)
