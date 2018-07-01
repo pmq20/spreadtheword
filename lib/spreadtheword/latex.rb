@@ -48,7 +48,7 @@ class Spreadtheword::LaTeX
       next if k.nil?
       first = v[0]
       title = k
-      description = 'N/A'
+      description = ''
       url = ''
       if :gitlab == first[:origin]
         title = first[:title]
@@ -61,26 +61,65 @@ class Spreadtheword::LaTeX
       ret += %Q_
 \\section{#{escape title}}
 
-\\subsection(URL)
+\\subsection{URL}
 
 #{escape url}
 
-\\subsection(Description)
+\\subsection{Description}
 
 #{escape description}
 
 _
+      ret += printDevelopers(v)
     end
     if @topics[nil]
       ret += %Q_
 \\section{Others}
       _
+      ret += printDevelopers(@topics[nil])
     end
     ret
   end
 
+  def printDevelopers(values)
+    developers = {}
+    values.each do |x|
+      developers[x[:commit].author] ||= []
+      developers[x[:commit].author] << x
+    end
+    ret = %Q_
+\\subsection{Developers}
+
+\\begin{enumerate}
+_
+    developers.each do |k,v|
+      ret += %Q_
+      \\item #{escape k} ($#{v.size*1.0 / values.size}\\%$)
+      _
+    end
+    ret += %Q_
+\\end{enumerate}
+_
+    developers.each do |k,v|
+      ret += %Q_
+\\subsection{#{escape k}'s Messages}
+
+
+\\begin{enumerate}
+      _
+      v.each do |x|
+        ret += %Q_
+#{escape x.commit.msg}
+_
+      end      
+      ret += %Q_
+\\end{enumerate}
+      _
+    end
+  end
+
   def escape str
-    return '' unless str.present?
+    return 'N/A' unless str.present?
     if @getTranslation && str =~ Spreadtheword::NONASCII
       str = @getTranslation.call(str)
     end
