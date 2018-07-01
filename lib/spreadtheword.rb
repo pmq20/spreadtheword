@@ -151,7 +151,7 @@ class Spreadtheword
       identifier = nil
       payload = nil
       title = 'Others'
-      if x.origMsg =~ /\{(.*)#(\d+)\}/
+      if x.origMsg =~ /\{(.+)#(\d+)\}/
         origin = :gitlab
         if $1.include?('/')
           targetProjectId = $1.dup
