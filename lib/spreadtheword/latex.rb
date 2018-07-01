@@ -109,7 +109,7 @@ _
       _
       v.each do |x|
         ret += %Q_
-#{escape x.commit.msg}
+#{escape x[:commit].msg}
 _
       end      
       ret += %Q_
