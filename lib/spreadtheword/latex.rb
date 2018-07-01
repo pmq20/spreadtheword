@@ -44,6 +44,7 @@ class Spreadtheword::LaTeX
 
   def sections
     ret = ''
+binding.pry
     @topics.each do |k,v|
       next if k.nil?
       first = v[0]

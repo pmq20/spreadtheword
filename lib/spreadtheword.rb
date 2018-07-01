@@ -151,7 +151,18 @@ class Spreadtheword
       payload = nil
       title = 'Others'
       begin
-        if x.origMsg =~ /\{(.+)#(\d+)\}/
+        if x.origMsg = ~ /\{W#(\d+)\}/
+          origin = :wrike
+          identifier = "W#{$1}"
+          payload = getWrike($1)
+          title = payload['title']
+        elsif x.origMsg =~ /\{#(\d+)\}/
+          origin = :gitlab
+          targetProjectId = "#{x.gitlabProject[:namespace]}/#{x.gitlabProject[:project]}"
+          identifier = "#{targetProjectId}##{$1}"
+          payload = getGitlab(targetProjectId, $1)
+          title = payload.title
+        elsif x.origMsg =~ /\{(.+)#(\d+)\}/
           origin = :gitlab
           if $1.include?('/')
             targetProjectId = $1.dup
@@ -161,17 +172,6 @@ class Spreadtheword
           identifier = "#{targetProjectId}##{$2}"
           payload = getGitlab(targetProjectId, $2)
           title = payload.title
-        elsif x.origMsg =~ /\{#(\d+)\}/
-          origin = :gitlab
-          targetProjectId = "#{x.gitlabProject[:namespace]}/#{x.gitlabProject[:project]}"
-          identifier = "#{targetProjectId}##{$1}"
-          payload = getGitlab(targetProjectId, $1)
-          title = payload.title
-        elsif x.origMsg = ~ /\{W#(\d+)\}/
-          origin = :wrike
-          identifier = "W#{$1}"
-          payload = getWrike($1)
-          title = payload['title']
         end
       rescue => e
         STDERR.puts "!!! Exception when parsing topic !!! #{e}"
