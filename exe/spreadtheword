@@ -51,6 +51,10 @@ OptionParser.new do |opts|
     options.console = true
   end
 
+  opts.on("--google-translate", "If present, translate commit messages that contain non-ASCII characters to English.") do
+    options.googleTranslate = true
+  end
+
   opts.on("-h", "--help", "Prints this help and exit") do
     usage.call(STDOUT)
     STDOUT.puts

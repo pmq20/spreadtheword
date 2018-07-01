@@ -5,6 +5,7 @@ require 'gitlab'
 require 'spreadtheword/version'
 require 'spreadtheword/utils'
 require 'spreadtheword/latex'
+require 'google/cloud/translate'
 
 class Spreadtheword
   CONNECTOR = '__spreadtheword__'
@@ -17,6 +18,7 @@ class Spreadtheword
 
     configureGitlab(options) if options.gitlabToken
     configureWrike(options) if options.wrikeToken
+    configureGoogleTranslate(options) if options.googleTranslate
 
     @utils = Utils.new(options)
     @topics = {}
@@ -38,16 +40,33 @@ class Spreadtheword
     @wrikeCache = {}
   end
 
+  def configureGoogleTranslate(options)
+    @translate = Google::Cloud::Translate.new
+    @translateCache = {}
+  end
+
   def getWrike(wId)
     unless @wrikeCache[wId]
       permalink = "https://www.wrike.com/open.htm?id=#{wId}"
       @utils.say "Fetching Wrike task #{permalink}"
       tasks = @wrike.task.list nil, nil, permalink: permalink
+      @utils.say "."
       taskId = tasks['data'][0]['id']
       task = @wrike.task.details taskId
+      @utils.say "."
       @wrikeCache[wId] = task['data'][0]
+      @utils.say "\n"
     end
     return @wrikeCache[wId]
+  end
+
+  def getTranslation(sentence)
+    unless @wrikeCache[sentence]
+      @utils.say "Translating #{sentence} to"
+      @wrikeCache[sentence] = @translate.translate sentence, to: "en"
+      @utils.say "#{@wrikeCache[sentence].text}\n"
+    end
+    return @wrikeCache[sentence]
   end
 
   def run!
@@ -89,15 +108,30 @@ class Spreadtheword
       end
       OpenStruct.new.tap do |y|
         y.author = contents[0]
-        y.msg = contents[1]
-        y.topic = y.msg
+        y.origMsg = contents[1]
+        if y.origMsg
+          y.msg = getTranslation(contents[1]).text
+        else
+          y.msg = y.origMsg
+        end
       end
     end
   end
 
   def parseTopics(logs)
     logs.each do |x|
-      @topics[x.topic] = x
+      title = 'Others'
+      topic = {}
+      if x.origMsg =~ /\{(.*)#(\d+)\}/
+      elsif x.origMsg =~ /\{#(\d+)\}/
+      elsif x.orgMsg = ~ /\{W#(\d+)\}/
+        topic = getWrike($1)
+      end
+      @topics[title] ||= []
+      @topics[title] << {
+        commit: x,
+        topic: topic,
+      }
     end
   end
 
