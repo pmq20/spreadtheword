@@ -38,6 +38,18 @@ class Spreadtheword
     @wrikeCache = {}
   end
 
+  def getWrike(wId)
+    unless @wrikeCache[wId]
+      permalink = "https://www.wrike.com/open.htm?id=#{wId}"
+      @utils.say "Fetching Wrike task #{permalink}"
+      tasks = @wrike.task.list nil, nil, permalink: permalink
+      taskId = tasks['data'][0]['id']
+      task = @wrike.task.details taskId
+      @wrikeCache[wId] = task['data'][0]
+    end
+    return @wrikeCache[wId]
+  end
+
   def run!
     logs = structure(fetchAllLogs)
     parseTopics(logs)
