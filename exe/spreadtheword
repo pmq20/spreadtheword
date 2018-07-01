@@ -15,9 +15,9 @@ Spread the Word (spreadtheword) v#{::Spreadtheword::VERSION}
 Automatically generate a release-note document based on git commit messages.
 Usage
   spreadtheword [PROJECT 1] [PROJECT 2]...[PROJECT N] [OPTION 1] [OPTION 2]...[OPTION N]
-  If no projects were provided, the current directory would be used as the sole project directory.
-  If multiple projects were provided, the git commit messages of those projects would be merged.
-
+  * If no projects were provided, the current directory would be used as the sole project directory;
+  * If multiple projects were provided, the git commit messages of those projects would be merged;
+  * If no options were specified, their default (see below) will be used.
 }.strip
 
 projects = []
@@ -41,7 +41,7 @@ end
 OptionParser.new do |opts|
   opts.banner = USAGE
 
-  opts.on("-v", "--version", "Prints the version of rubyc and exit") do
+  opts.on("-v", "--version", "Prints the version of spreadtheword and exit") do
     puts ::Spreadtheword::VERSION
     exit 0
   end
