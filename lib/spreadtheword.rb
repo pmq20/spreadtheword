@@ -1,3 +1,4 @@
+require 'uri'
 require 'ostruct'
 require 'active_support/all'
 require 'wrike3'
@@ -30,6 +31,9 @@ class Spreadtheword
       config.endpoint       = options.gitlabEndpoint
       config.private_token  = options.gitlabToken
     end
+    @gitlab = URI(options.gitlabEndpoint)
+    @gitlabCurrentProject = nil
+    @gilabProjects = {}
     @gitlabCache = {}
   end
 
@@ -44,6 +48,14 @@ class Spreadtheword
   def configureGoogleTranslate(options)
     @translate = Google::Cloud::Translate.new
     @translateCache = {}
+  end
+
+  def getGitlab(projectId, issueNumber)
+    unless @gitlabCache[projectId] && @gitlabCache[projectId][issueNumber]
+      @gitlabCache[projectId] ||= {}
+      @gitlabCache[projectId][issueNumber] = Gitlab.issue(projectId, issueNumber)
+    end
+    return @gitlabCache[projectId][issueNumber]
   end
 
   def getWrike(wId)
@@ -71,34 +83,47 @@ class Spreadtheword
   end
 
   def run!
-    logs = structure(fetchAllLogs)
-    parseTopics(logs)
+    fetchAllLogs
+    parseTopics
     writer = Spreadtheword::LaTeX.new(@title, @author, @topics)
     writer.write!
   end
 
-  def fetchAllLogs
-    [].tap do |ret|
-      @projects.each do |project|
-        @utils.say "Fetching git commit logs from #{project}"
-        Dir.chdir(project) do
-          ret.concat fetchLogs
-          @utils.say "."
-        end
-        @utils.say "\n"
+  def gitlabSetCurrentProject
+    remotes = `git remote -v`
+    remotes.to_s.split("\n").each do |line|
+      if line.include?(@gitlab.host)
+        lines = line.split(@gitlab.host)
+        liness = lines[1].split('/')
+        @gitlabCurrentProject = {
+          namespace: liness[1],
+          project: liness[2].split('.git')[0],
+        }
       end
     end
   end
 
-  def fetchLogs
+  def fetchAllLogs
+    @logs = []
+    @projects.each do |project|
+      if @gitlab
+        gitlabSetCurrentProject
+      end
+      @utils.say "Fetching git commit logs from #{project}"
+      Dir.chdir(project) do
+        fetchLogs
+        @utils.say "."
+      end
+      @utils.say "\n"
+    end
+  end
+
+  def structureLogs
     cmd = %Q{git log --pretty=format:"%an__spreadtheword__%s"}
     if @since
       cmd = %Q{#{cmd} #{@since}..master}
     end
     logs = `#{cmd}`.to_s.split("\n")
-  end
-
-  def structure(logs)
     logs.delete_if do |x|
       x.nil? || '' == x.to_s.strip
     end
@@ -115,6 +140,9 @@ class Spreadtheword
         else
           y.msg = y.origMsg
         end
+        if @gitlab
+          y.gitlabProject = @gitlabCurrentProject
+        end
       end
     end
   end
@@ -126,7 +154,21 @@ class Spreadtheword
       payload = nil
       title = 'Others'
       if x.origMsg =~ /\{(.*)#(\d+)\}/
+        origin = :gitlab
+        if $1.include?('/')
+          targetProjectId = $1.dup
+        else
+          targetProjectId = "#{@gitlabCurrentProject[:namespace]}/#{$1}"
+        end
+        identifier = "#{targetProjectId}##{$2}"
+        payload = getGitlab(targetProjectId, $2)
+        title = payload.title
       elsif x.origMsg =~ /\{#(\d+)\}/
+        origin = :gitlab
+        targetProjectId = "#{@gitlabCurrentProject[:namespace]}/#{@gitlabCurrentProject[:project]}"
+        identifier = "#{targetProjectId}##{$1}"
+        payload = getGitlab(targetProjectId, $1)
+        title = payload.title
       elsif x.orgMsg = ~ /\{W#(\d+)\}/
         origin = :wrike
         identifier = "W#{$1}"
