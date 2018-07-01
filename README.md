@@ -65,6 +65,8 @@
       --wrike-token="XXX"                             \
       > v1.6.tex
 
+Hint: you might need to set environment variable `LANG=en_US.UTF-8` to support wide characters of git log messages.
+
 ## License
 
 MIT

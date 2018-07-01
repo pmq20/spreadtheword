@@ -74,12 +74,12 @@ class Spreadtheword
   end
 
   def getTranslation(sentence)
-    unless @wrikeCache[sentence]
+    unless @translateCache[sentence]
       @utils.say "Translating #{sentence} to"
-      @wrikeCache[sentence] = @translate.translate sentence, to: "en"
+      @translateCache[sentence] = @translate.translate sentence, to: "en"
       @utils.say "#{@wrikeCache[sentence].text}\n"
     end
-    return @wrikeCache[sentence]
+    return @translateCache[sentence]
   end
 
   def run!
@@ -109,12 +109,10 @@ class Spreadtheword
       if @gitlab
         gitlabSetCurrentProject
       end
-      @utils.say "Fetching git commit logs from #{project}"
+      @utils.say "Fetching git commit logs from #{project}\n"
       Dir.chdir(project) do
         fetchLogs
-        @utils.say "."
       end
-      @utils.say "\n"
     end
   end
 
