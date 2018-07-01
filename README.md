@@ -28,6 +28,12 @@
 * Integrates with Wrike and GitLab to fetch developement task titles
 * Integrates with Google Translate to automatically translate messages to English
 
+## Commit Message Conventions
+
+- `{#1}` means issue #1 of Gitlab. Eg. `{#63} add backend code for fields`
+- `{prj#1}` means issue #1 of Gitlab project `prj`. Eg. `{UI#1} add code for forms`
+- `{W1}` menas Wrike task #1. Eg. `{W4123780} fix config files`
+
 ## Usage
 
     spreadtheword [PROJECT 1] [PROJECT 2]...[PROJECT N] [OPTION 1] [OPTION 2]...[OPTION N]
