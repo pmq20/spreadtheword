@@ -76,6 +76,7 @@ _
 #{escape description}
 
 _
+      end
 
       ret += printDevelopers(v)
     end
