@@ -180,7 +180,7 @@ class Spreadtheword
       end
       @topics[identifier] ||= []
       @topics[identifier] << {
-        origin: origin
+        origin: origin,
         commit: x,
         payload: payload,
         title: title,
