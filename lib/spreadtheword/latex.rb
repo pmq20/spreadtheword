@@ -44,7 +44,7 @@ class Spreadtheword::LaTeX
 
   def sections
     ret = ''
-    @topics.map do |k,v|
+    @topics.each do |k,v|
       first = v[0]
       title = k
       description = ''
@@ -63,7 +63,8 @@ class Spreadtheword::LaTeX
 
 #{escape url}
       _
-    end.join "\n"
+    end
+    ret
   end
 
   def escape str
