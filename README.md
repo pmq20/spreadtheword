@@ -23,10 +23,10 @@
 
 ## Features
 
-* Integrates with Wrike and GitLab to fetch developement task titles
-* Integrates with Google Translate to automatically translate messages to English
 * Multiple projects are supported, which means git messages from multiple repositories can be merged to produce a unified release document
 * Multiple output formats are supported, e.g. LaTeX
+* Integrates with Wrike and GitLab to fetch developement task titles
+* Integrates with Google Translate to automatically translate messages to English
 
 ## Usage
 
