@@ -116,6 +116,7 @@ _
 \\end{enumerate}
       _
     end
+    ret
   end
 
   def escape str
