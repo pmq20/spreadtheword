@@ -1,10 +1,11 @@
 require 'nokogiri'
 
 class Spreadtheword::LaTeX
-  def initialize title, author, topics
+  def initialize title, author, topics, getTranslation
     @title = title
     @author = author
     @topics = topics
+    @getTranslation = getTranslation
   end
 
   def write!
@@ -42,14 +43,34 @@ class Spreadtheword::LaTeX
   end
 
   def sections
+    ret = ''
     @topics.map do |k,v|
-      %Q_
-\\section{#{escape k}}
+      first = v[0]
+      title = k
+      description = ''
+      url = ''
+      if :gitlab == first[:origin]
+        title = first[:title]
+        description = first[:payload].description
+        url = first[:payload].web_url
+      elsif :plain == first[:origin]
+        title = 'Others'
+      end
+      ret += %Q_
+\\section{#{escape title}}
+
+#{escape description}
+
+#{escape url}
       _
     end.join "\n"
   end
 
   def escape str
-    str.gsub(/[^\u0000-\u007F]+/, '').gsub('\\', '\\textbackslash ').gsub('&', '\\\&').gsub('%', '\\%').gsub('$', '\\$').gsub('#', '\\#').gsub('_', '\\_').gsub('{', '\\{').gsub('}', '\\}').gsub('~', '\\textasciitilde ').gsub('^', '\\textasciicircum ')
+    return '' unless str.present?
+    if @getTranslation && str =~ NONASCII
+      str = @getTranslation.call(str)
+    end
+    str.gsub(NONASCII, '').gsub('\\', '\\textbackslash ').gsub('&', '\\\&').gsub('%', '\\%').gsub('$', '\\$').gsub('#', '\\#').gsub('_', '\\_').gsub('{', '\\{').gsub('}', '\\}').gsub('~', '\\textasciitilde ').gsub('^', '\\textasciicircum ')
   end
 end

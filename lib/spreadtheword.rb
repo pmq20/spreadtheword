@@ -48,7 +48,15 @@ class Spreadtheword
 
   def configureGoogleTranslate(options)
     @translate = Google::Cloud::Translate.new(key: options.googleTranslateKey)
-    @translateCache = {}
+    translateCache = {}
+    @getTranslation = lambda { |sentence|
+    unless translateCache[sentence]
+      @utils.say "Translating\n-> #{sentence}\n"
+      translateCache[sentence] = @translate.translate(sentence, to: "en")
+      @utils.say "<- #{@translateCache[sentence].text}\n"
+    end
+    translateCache[sentence]
+  }
   end
 
   def getGitlab(projectId, issueNumber)
@@ -74,19 +82,10 @@ class Spreadtheword
     return @wrikeCache[wId]
   end
 
-  def getTranslation(sentence)
-    unless @translateCache[sentence]
-      @utils.say "Translating\n-> #{sentence}\n"
-      @translateCache[sentence] = @translate.translate(sentence, to: "en")
-      @utils.say "<- #{@translateCache[sentence].text}\n"
-    end
-    return @translateCache[sentence]
-  end
-
   def run!
     fetchAllLogs
     parseTopics
-    writer = Spreadtheword::LaTeX.new(@title, @author, @topics)
+    writer = Spreadtheword::LaTeX.new(@title, @author, @topics, @getTranslation)
     writer.write!
   end
 
@@ -133,7 +132,7 @@ class Spreadtheword
         y.author = contents[0]
         y.origMsg = contents[1]
         if @translate && y.origMsg =~ NONASCII
-          y.msg = getTranslation(contents[1]).text
+          y.msg = @getTranslation.call(contents[1]).text
         else
           y.msg = y.origMsg
         end
@@ -168,7 +167,7 @@ class Spreadtheword
           identifier = "#{targetProjectId}##{$1}"
           payload = getGitlab(targetProjectId, $1)
           title = payload.title
-        elsif x.orgMsg = ~ /\{W#(\d+)\}/
+        elsif x.origMsg = ~ /\{W#(\d+)\}/
           origin = :wrike
           identifier = "W#{$1}"
           payload = getWrike($1)
@@ -182,7 +181,7 @@ class Spreadtheword
         title = 'Others'
       end
       if @translate && title =~ NONASCII
-        title = getTranslation(title).text
+        title = @getTranslation.call(title).text
       end
       @topics[identifier] ||= []
       @topics[identifier] << {
