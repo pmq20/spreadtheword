@@ -76,9 +76,9 @@ class Spreadtheword
 
   def getTranslation(sentence)
     unless @translateCache[sentence]
-      @utils.say "Translating #{sentence} to"
+      @utils.say "Translating\n-> #{sentence}\n"
       @translateCache[sentence] = @translate.translate(sentence, to: "en")
-      @utils.say "#{@translateCache[sentence].text}\n"
+      @utils.say "<- #{@translateCache[sentence].text}\n"
     end
     return @translateCache[sentence]
   end
@@ -100,17 +100,16 @@ class Spreadtheword
           namespace: liness[1],
           project: liness[2].split('.git')[0],
         }
+        return
       end
     end
   end
 
   def fetchAllLogs
     @projects.each do |project|
-      if @gitlab
-        gitlabSetCurrentProject
-      end
       @utils.say "Fetching git commit logs from #{project}\n"
       Dir.chdir(project) do
+        gitlabSetCurrentProject if @gitlab
         fetchLogs
       end
     end
@@ -157,14 +156,14 @@ class Spreadtheword
         if $1.include?('/')
           targetProjectId = $1.dup
         else
-          targetProjectId = "#{@gitlabCurrentProject[:namespace]}/#{$1}"
+          targetProjectId = "#{x.gitlabProject[:namespace]}/#{$1}"
         end
         identifier = "#{targetProjectId}##{$2}"
         payload = getGitlab(targetProjectId, $2)
         title = payload.title
       elsif x.origMsg =~ /\{#(\d+)\}/
         origin = :gitlab
-        targetProjectId = "#{@gitlabCurrentProject[:namespace]}/#{@gitlabCurrentProject[:project]}"
+        targetProjectId = "#{x.gitlabProject[:namespace]}/#{x.gitlabProject[:project]}"
         identifier = "#{targetProjectId}##{$1}"
         payload = getGitlab(targetProjectId, $1)
         title = payload.title
