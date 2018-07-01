@@ -53,7 +53,7 @@ class Spreadtheword
     unless translateCache[sentence]
       @utils.say "Translating\n-> #{sentence}\n"
       translateCache[sentence] = @translate.translate(sentence, to: "en")
-      @utils.say "<- #{@translateCache[sentence].text}\n"
+      @utils.say "<- #{translateCache[sentence].text}\n"
     end
     translateCache[sentence]
   }

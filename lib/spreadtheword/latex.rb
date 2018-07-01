@@ -45,6 +45,7 @@ class Spreadtheword::LaTeX
   def sections
     ret = ''
     @topics.each do |k,v|
+      next if k.nil?
       first = v[0]
       title = k
       description = ''
@@ -53,8 +54,6 @@ class Spreadtheword::LaTeX
         title = first[:title]
         description = first[:payload].description
         url = first[:payload].web_url
-      elsif :plain == first[:origin]
-        title = 'Others'
       end
       ret += %Q_
 \\section{#{escape title}}
@@ -62,6 +61,11 @@ class Spreadtheword::LaTeX
 #{escape description}
 
 #{escape url}
+      _
+    end
+    if @topics[nil]
+      ret += %Q_
+\\section{Others}
       _
     end
     ret
