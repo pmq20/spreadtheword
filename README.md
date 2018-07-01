@@ -38,6 +38,9 @@
 
     spreadtheword [PROJECT 1] [PROJECT 2]...[PROJECT N] [OPTION 1] [OPTION 2]...[OPTION N]
           --author=STRING              Specifies the author of the output document. Default: user.name of git config
+          --console                    If present, start the console after spreadtheword initializes.
+          --google-translate-key=STRING
+                                      Specifies a Google Translate API access key and translate commit messages that contain non-ASCII characters to English.
       -h, --help                       Prints this help and exit
           --gitlab-endpoint=URL        Specifies GitLab API endpoint URL.
           --gitlab-token=STRING        Specifies the OAuth access token of your GitLab.
@@ -60,7 +63,8 @@
       /projects/Y                                     \
       --since=v1.5                                    \
       --title="Your Project v1.6 Release Notes"       \
-      --google-translate-key="XXX"                  \
+      --author="Your Company, Inc."                   \
+      --google-translate-key="XXX"                    \
       --gitlab-endpoint="https://example.net/api/v4"  \
       --gitlab-token="XXX"                            \
       --wrike-token="XXX"                             \
