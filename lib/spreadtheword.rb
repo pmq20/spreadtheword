@@ -52,8 +52,8 @@ class Spreadtheword
     @getTranslation = lambda { |sentence|
     unless translateCache[sentence]
       @utils.say "Translating\n-> #{sentence}\n"
-      translateCache[sentence] = @translate.translate(sentence, to: "en")
-      @utils.say "<- #{translateCache[sentence].text}\n"
+      translateCache[sentence] = @translate.translate(sentence, to: "en").text
+      @utils.say "<- #{translateCache[sentence]}\n"
     end
     translateCache[sentence]
   }
@@ -132,7 +132,7 @@ class Spreadtheword
         y.author = contents[0]
         y.origMsg = contents[1]
         if @translate && y.origMsg =~ NONASCII
-          y.msg = @getTranslation.call(contents[1]).text
+          y.msg = @getTranslation.call(contents[1])
         else
           y.msg = y.origMsg
         end
@@ -181,7 +181,7 @@ class Spreadtheword
         title = 'Others'
       end
       if @translate && title =~ NONASCII
-        title = @getTranslation.call(title).text
+        title = @getTranslation.call(title)
       end
       @topics[identifier] ||= []
       @topics[identifier] << {
