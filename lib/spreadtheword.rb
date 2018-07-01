@@ -118,7 +118,7 @@ class Spreadtheword
     end
   end
 
-  def structureLogs
+  def fetchLogs
     cmd = %Q{git log --pretty=format:"%an__spreadtheword__%s"}
     if @since
       cmd = %Q{#{cmd} #{@since}..master}
