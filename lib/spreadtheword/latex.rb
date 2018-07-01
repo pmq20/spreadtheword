@@ -73,9 +73,9 @@ class Spreadtheword::LaTeX
 
   def escape str
     return '' unless str.present?
-    if @getTranslation && str =~ NONASCII
+    if @getTranslation && str =~ Spreadtheword::NONASCII
       str = @getTranslation.call(str)
     end
-    str.gsub(NONASCII, '').gsub('\\', '\\textbackslash ').gsub('&', '\\\&').gsub('%', '\\%').gsub('$', '\\$').gsub('#', '\\#').gsub('_', '\\_').gsub('{', '\\{').gsub('}', '\\}').gsub('~', '\\textasciitilde ').gsub('^', '\\textasciicircum ')
+    str.gsub(Spreadtheword::NONASCII, '').gsub('\\', '\\textbackslash ').gsub('&', '\\\&').gsub('%', '\\%').gsub('$', '\\$').gsub('#', '\\#').gsub('_', '\\_').gsub('{', '\\{').gsub('}', '\\}').gsub('~', '\\textasciitilde ').gsub('^', '\\textasciicircum ')
   end
 end
