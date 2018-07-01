@@ -77,7 +77,7 @@ class Spreadtheword
   def getTranslation(sentence)
     unless @translateCache[sentence]
       @utils.say "Translating #{sentence} to"
-      @translateCache[sentence] = @translate.translate sentence, to: "en"
+      @translateCache[sentence] = @translate.translate(sentence, to: "en")
       @utils.say "#{@wrikeCache[sentence].text}\n"
     end
     return @translateCache[sentence]
