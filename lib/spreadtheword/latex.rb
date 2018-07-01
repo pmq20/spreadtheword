@@ -60,6 +60,7 @@ class Spreadtheword::LaTeX
       elsif :wrike == first[:origin]
         title = first[:title]
         description = Nokogiri::HTML(first[:payload]['description'].gsub('<br />', "\n\n")).text
+        url = first[:payload].spreadthewordPermalink
       end
       ret += %Q_
 \\section{#{escape title}}
@@ -79,6 +80,9 @@ _
       end
 
       ret += printDevelopers(v)
+      ret += %Q_
+\\newpage
+      _
     end
     if @topics[nil]
       ret += %Q_
@@ -107,16 +111,23 @@ _
     end
     ret += %Q_
 \\end{enumerate}
-_
+    _
     developers.each do |k,v|
       ret += %Q_
 \\subsection{#{escape k}'s Commit Messages}
+\\begin{enumerate}
       _
-      v.map do |x|
+      uniqM = v.map do |x|
         x[:commit].msg
-      end.uniq.each do |x|
-        ret += "#{escape x}.\n"
-      end
+      end.uniq
+      uniqM.each do |x|
+        ret += %Q_
+\\item #{escape x}
+        _
+      end      
+      ret += %Q_
+\\end{enumerate}
+      _
     end
     ret
   end

@@ -77,6 +77,7 @@ class Spreadtheword
       task = @wrike.task.details taskId
       @utils.say "."
       @wrikeCache[wId] = task['data'][0]
+      @wrikeCache[wId].spreadthewordPermalink = permalink
       @utils.say "\n"
     end
     return @wrikeCache[wId]
@@ -156,14 +157,14 @@ class Spreadtheword
           identifier = "W#{$1}"
           payload = getWrike($1)
           title = payload['title']
-          x.msg = x.msg.split(/\{W(\d+)\}/).join(' ')
+          x.msg = x.msg.gsub(/\{W\d+\}/, '')
         elsif x.origMsg =~ /\{#(\d+)\}/
           origin = :gitlab
           targetProjectId = "#{x.gitlabProject[:namespace]}/#{x.gitlabProject[:project]}"
           identifier = "#{targetProjectId}##{$1}"
           payload = getGitlab(targetProjectId, $1)
           title = payload.title
-          x.msg = x.msg.split(/\{#(\d+)\}/).join(' ')
+          x.msg = x.msg.gsub(/\{#\d+\}/, '')
         elsif x.origMsg =~ /\{(.+)#(\d+)\}/
           origin = :gitlab
           if $1.include?('/')
@@ -174,7 +175,7 @@ class Spreadtheword
           identifier = "#{targetProjectId}##{$2}"
           payload = getGitlab(targetProjectId, $2)
           title = payload.title
-          x.msg = x.msg.split(/\{(.+)#(\d+)\}/).join(' ')
+          x.msg = x.msg.gsub(/\{.+#\d+\}/, '')
         end
       rescue => e
         STDERR.puts "!!! Exception when parsing topic !!! #{e}"
