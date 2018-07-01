@@ -60,6 +60,7 @@
       /projects/Y                                     \
       --since=v1.5                                    \
       --title="Your Project v1.6 Release Notes"       \
+      --google-translate-key="XXX"                  \
       --gitlab-endpoint="https://example.net/api/v4"  \
       --gitlab-token="XXX"                            \
       --wrike-token="XXX"                             \

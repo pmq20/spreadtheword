@@ -110,12 +110,10 @@ _
     developers.each do |k,v|
       ret += %Q_
 \\subsection{#{escape k}'s Commit Messages}
-
       _
-      uniqM = v.map do |x|
+      v.map do |x|
         x[:commit].msg
-      end.uniq
-      uniqM.each do |x|
+      end.uniq.each do |x|
         ret += "#{escape x}.\n"
       end
     end
