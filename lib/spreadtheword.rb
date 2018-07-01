@@ -15,8 +15,8 @@ class Spreadtheword
     @author = options.author ? options.author : gitUserName
     @since = options.since
 
-    configureGitlab(options) if options.gitlabEndpoint
-    configureWrike(options) if options.wrikeId
+    configureGitlab(options) if options.gitlabToken
+    configureWrike(options) if options.wrikeToken
 
     @utils = Utils.new(options)
     @topics = {}

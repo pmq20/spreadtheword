@@ -45,7 +45,6 @@
           --since=TAG/COMMIT-SHA1      Specifies the begining from which the git commits will be fetched. Default: the first commit
           --title=STRING               Specifies the title of the output document. Default: "Relase Notes"
       -v, --version                    Prints the version of spreadtheword and exit
-          --wrike-id=STRING            Specifies the OAuth Client ID of your Wrike API app.
           --wrike-token=STRING         Specifies the access token of your Wrike API app.
 
 ## Notes
@@ -63,7 +62,6 @@
       --title="Your Project v1.6 Release Notes"       \
       --gitlab-endpoint="https://example.net/api/v4"  \
       --gitlab-token="XXX"                            \
-      --wrike-id="XXX"                                \
       --wrike-token="XXX"                             \
       > v1.6.tex
 

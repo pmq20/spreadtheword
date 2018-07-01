@@ -81,11 +81,7 @@ OptionParser.new do |opts|
     puts ::Spreadtheword::VERSION
     exit 0
   end
-
-  opts.on("--wrike-id=STRING", "Specifies the OAuth Client ID of your Wrike API app.") do |x|
-    options.wrikeId = x
-  end
-
+  
   opts.on("--wrike-token=STRING", "Specifies the access token of your Wrike API app.") do |x|
     options.wrikeToken = x
   end
