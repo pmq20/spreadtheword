@@ -5,10 +5,11 @@
 # This file is part of spreadtheword, distributed under the MIT License
 # For full terms see the included LICENSE file
 
-require "bundler/setup"
+require 'bundler/setup'
 require 'optparse'
-require "ostruct"
-require "spreadtheword"
+require 'ostruct'
+require 'pry'
+require 'spreadtheword'
 
 USAGE = %Q{
 Spread the Word (spreadtheword) v#{::Spreadtheword::VERSION}
@@ -44,6 +45,10 @@ OptionParser.new do |opts|
 
   opts.on("--author=STRING", "Specifies the author of the output document. Default: user.name of git config") do |x|
     options.author = x
+  end
+
+  opts.on("--console", "If present, start the console after spreadtheword initializes.") do
+    options.console = true
   end
 
   opts.on("-h", "--help", "Prints this help and exit") do
@@ -89,4 +94,8 @@ OptionParser.new do |opts|
 end.parse!
 
 instance = ::Spreadtheword.new projects, options
+if options.console
+  binding.pry
+end
 instance.run!
+

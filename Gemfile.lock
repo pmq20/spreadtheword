@@ -92,6 +92,7 @@ GEM
       shoulda (~> 3.5)
 
 PLATFORMS
+  ruby
   x64-mingw32
 
 DEPENDENCIES
