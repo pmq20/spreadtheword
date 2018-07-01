@@ -151,27 +151,35 @@ class Spreadtheword
       identifier = nil
       payload = nil
       title = 'Others'
-      if x.origMsg =~ /\{(.+)#(\d+)\}/
-        origin = :gitlab
-        if $1.include?('/')
-          targetProjectId = $1.dup
-        else
-          targetProjectId = "#{x.gitlabProject[:namespace]}/#{$1}"
+      begin
+        if x.origMsg =~ /\{(.+)#(\d+)\}/
+          origin = :gitlab
+          if $1.include?('/')
+            targetProjectId = $1.dup
+          else
+            targetProjectId = "#{x.gitlabProject[:namespace]}/#{$1}"
+          end
+          identifier = "#{targetProjectId}##{$2}"
+          payload = getGitlab(targetProjectId, $2)
+          title = payload.title
+        elsif x.origMsg =~ /\{#(\d+)\}/
+          origin = :gitlab
+          targetProjectId = "#{x.gitlabProject[:namespace]}/#{x.gitlabProject[:project]}"
+          identifier = "#{targetProjectId}##{$1}"
+          payload = getGitlab(targetProjectId, $1)
+          title = payload.title
+        elsif x.orgMsg = ~ /\{W#(\d+)\}/
+          origin = :wrike
+          identifier = "W#{$1}"
+          payload = getWrike($1)
+          title = payload['title']
         end
-        identifier = "#{targetProjectId}##{$2}"
-        payload = getGitlab(targetProjectId, $2)
-        title = payload.title
-      elsif x.origMsg =~ /\{#(\d+)\}/
-        origin = :gitlab
-        targetProjectId = "#{x.gitlabProject[:namespace]}/#{x.gitlabProject[:project]}"
-        identifier = "#{targetProjectId}##{$1}"
-        payload = getGitlab(targetProjectId, $1)
-        title = payload.title
-      elsif x.orgMsg = ~ /\{W#(\d+)\}/
-        origin = :wrike
-        identifier = "W#{$1}"
-        payload = getWrike($1)
-        title = payload['title']
+      rescue => e
+        STDERR.puts "!!! Exception when parsing topic !!! #{e}"
+        origin = :plain
+        identifier = nil
+        payload = nil
+        title = 'Others'
       end
       if @translate && title =~ NONASCII
         title = getTranslation(title).text
