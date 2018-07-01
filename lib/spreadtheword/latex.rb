@@ -44,25 +44,32 @@ class Spreadtheword::LaTeX
 
   def sections
     ret = ''
-binding.pry
     @topics.each do |k,v|
       next if k.nil?
       first = v[0]
       title = k
-      description = ''
+      description = 'N/A'
       url = ''
       if :gitlab == first[:origin]
         title = first[:title]
         description = first[:payload].description
         url = first[:payload].web_url
+      elsif :wrike == first[:origin]
+        title = first[:title]
+        description = Nokogiri::HTML(first[:payload]['description'].gsub('<br />', "\n\n")).text
       end
       ret += %Q_
 \\section{#{escape title}}
 
-#{escape description}
+\\subsection(URL)
 
 #{escape url}
-      _
+
+\\subsection(Description)
+
+#{escape description}
+
+_
     end
     if @topics[nil]
       ret += %Q_
