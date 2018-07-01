@@ -14,7 +14,7 @@ class Spreadtheword::LaTeX
 % !TEX encoding = UTF-8 Unicode
 
 \\documentclass[11pt]{article} % use larger type; default would be 10pt
-
+\\usepackage{hyperref}
 \\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
 \\usepackage{geometry} % to change the page dimensions
 \\geometry{a4paper} % or letterpaper (US) or a5paper or....
@@ -61,15 +61,19 @@ class Spreadtheword::LaTeX
       ret += %Q_
 \\section{#{escape title}}
 
-\\subsection{URL}
+\\subsection{Background}
 
-#{escape url}
+\\url{#{escape url}}
+_
 
+      if description.present?
+        ret += %Q_
 \\subsection{Description}
 
 #{escape description}
 
 _
+
       ret += printDevelopers(v)
     end
     if @topics[nil]
@@ -94,7 +98,7 @@ _
 _
     developers.each do |k,v|
       ret += %Q_
-      \\item #{escape k} ($#{v.size*1.0 / values.size}\\%$)
+      \\item #{escape k} ($#{v.size*100.0 / values.size}\\%$)
       _
     end
     ret += %Q_
@@ -102,7 +106,7 @@ _
 _
     developers.each do |k,v|
       ret += %Q_
-\\subsection{#{escape k}'s Messages}
+\\subsection{#{escape k}'s Commit Messages}
 
 
 \\begin{enumerate}
