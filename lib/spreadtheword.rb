@@ -151,7 +151,7 @@ class Spreadtheword
       payload = nil
       title = 'Others'
       begin
-        if x.origMsg = ~ /\{W#(\d+)\}/
+        if x.origMsg =~ /\{W(\d+)\}/
           origin = :wrike
           identifier = "W#{$1}"
           payload = getWrike($1)
