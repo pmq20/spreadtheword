@@ -111,7 +111,7 @@ _
       [
         v.size, %Q_
 \\item #{escape k.titleize} ($#{format('%.2f', v.size*100.0 / values.size)}\\%$)
-        _
+        _, k, v
       ]
     end
     devArr.sort! do |x,y|
@@ -123,7 +123,9 @@ _
     ret += %Q_
 \\end{enumerate}
     _
-    developers.each do |k,v|
+    devArr.each do |dev|
+      k = dev[2]
+      v = dev[3]
       ret += %Q_
 \\subsection{#{escape k.titleize}'s Commit Messages}
 \\begin{enumerate}
