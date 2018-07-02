@@ -33,8 +33,8 @@ class Spreadtheword::LaTeX
 \\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
 \\renewcommand{\\cftsecfont}{\\rmfamily\\mdseries\\upshape}
 \\renewcommand{\\cftsecpagefont}{\\rmfamily\\mdseries\\upshape} % No bold!
-\\title{#{@title}}
-\\author{#{@author}}
+\\title{#{@title.titleize}}
+\\author{#{@author.titleize}}
 \\begin{document}
 \\maketitle
 \\setcounter{tocdepth}{1}
@@ -63,7 +63,7 @@ class Spreadtheword::LaTeX
         url = first[:payload][:spreadthewordPermalink]
       end
       ret += %Q_
-\\section{#{escape title}}
+\\section{#{escape title.titleize}}
 
 \\subsection{Background}
 
@@ -71,6 +71,8 @@ class Spreadtheword::LaTeX
 _
 
       if description.present?
+        description.strip!
+        description[0] = description[0].upcase
         ret += %Q_
 \\subsection{Description}
 
@@ -106,7 +108,7 @@ _
 _
     developers.each do |k,v|
       ret += %Q_
-      \\item #{escape k} ($#{v.size*100 / values.size}\\%$)
+      \\item #{escape k} ($#{format('%.2f', v.size*100.0 / values.size)}\\%$)
       _
     end
     ret += %Q_
@@ -114,15 +116,15 @@ _
     _
     developers.each do |k,v|
       ret += %Q_
-\\subsection{#{escape k}'s Commit Messages}
+\\subsection{#{escape k.titleize}'s Commit Messages}
 \\begin{enumerate}
       _
       uniqM = v.map do |x|
-        x[:commit].msg
-      end.uniq
+        x[:commit].msg.to_s.strip
+      end.uniq.sort
       uniqM.each do |x|
         ret += %Q_
-\\item #{escape x}
+\\item #{escape x.titleize}
         _
       end      
       ret += %Q_
