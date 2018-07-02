@@ -1,11 +1,12 @@
 require 'nokogiri'
 
 class Spreadtheword::LaTeX
-  def initialize title, author, topics, getTranslation
+  def initialize title, author, topics, getTranslation, gitlab
     @title = title
     @author = author
     @topics = topics
     @getTranslation = getTranslation
+    @gitlab = gitlab
   end
 
   def write!
@@ -106,6 +107,9 @@ _
 
 \\begin{enumerate}
 _
+    developers.sort! do |x,y|
+      y.size <=> x.size
+    end
     developers.each do |k,v|
       ret += %Q_
       \\item #{escape k.titleize} ($#{format('%.2f', v.size*100.0 / values.size)}\\%$)
@@ -119,13 +123,23 @@ _
 \\subsection{#{escape k.titleize}'s Commit Messages}
 \\begin{enumerate}
       _
+      reverseH = {}
       uniqM = v.map do |x|
-        x[:commit].msg.to_s.strip
+        msg = x[:commit].msg.to_s.strip.humanize
+        reverseH[msg] = x
+        msg
       end.uniq.sort
-      uniqM.each do |x|
-        ret += %Q_
-\\item #{escape x.titleize}
-        _
+      uniqM.each do |msg|
+        x = reverseH[msg]
+        if @gitlab
+          ret += %Q_
+\\item \\href{#{@gitlab.scheme}://#{@gitlab.host}/#{x.gitlabProject}/commit/#{x.hash}}{#{escape msg}}
+          _
+        else
+          ret += %Q_
+\\item #{escape msg}
+          _
+        end
       end      
       ret += %Q_
 \\end{enumerate}

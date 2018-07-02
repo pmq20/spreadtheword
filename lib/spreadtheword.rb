@@ -86,7 +86,7 @@ class Spreadtheword
   def run!
     fetchAllLogs
     parseTopics
-    writer = Spreadtheword::LaTeX.new(@title, @author, @topics, @getTranslation)
+    writer = Spreadtheword::LaTeX.new(@title, @author, @topics, @getTranslation, @gitlab)
     writer.write!
   end
 
@@ -116,7 +116,7 @@ class Spreadtheword
   end
 
   def fetchLogs
-    cmd = %Q{git log --pretty=format:"%an__spreadtheword__%s"}
+    cmd = %Q{git log --pretty=format:"%an#{CONNECTOR}%s#{CONNECTOR}%H"}
     if @since
       cmd = %Q{#{cmd} #{@since}..master}
     end
@@ -132,6 +132,7 @@ class Spreadtheword
       OpenStruct.new.tap do |y|
         y.author = contents[0]
         y.origMsg = contents[1]
+        y.hash = contents[2]
         if @translate && y.origMsg =~ NONASCII
           y.msg = @getTranslation.call(contents[1])
         else
