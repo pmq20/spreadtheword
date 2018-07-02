@@ -1,3 +1,4 @@
+require 'cgi'
 require 'uri'
 require 'ostruct'
 require 'active_support/all'
@@ -52,7 +53,7 @@ class Spreadtheword
     @getTranslation = lambda { |sentence|
     unless translateCache[sentence]
       @utils.say "Translating\n-> #{sentence}\n"
-      translateCache[sentence] = @translate.translate(sentence, to: "en").text
+      translateCache[sentence] = CGI.unescapeHTML(@translate.translate(sentence, to: "en").text)
       @utils.say "<- #{translateCache[sentence]}\n"
     end
     translateCache[sentence]
