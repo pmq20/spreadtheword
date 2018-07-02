@@ -94,7 +94,7 @@ _
       ret += %Q_
 \\section{Others}
       _
-      ret += printDevelopers(topicNil)
+      ret += printDevelopers(topicNil[1])
     end
     ret
   end
