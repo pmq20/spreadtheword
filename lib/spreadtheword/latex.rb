@@ -108,7 +108,7 @@ _
 _
     developers.each do |k,v|
       ret += %Q_
-      \\item #{escape k} ($#{format('%.2f', v.size*100.0 / values.size)}\\%$)
+      \\item #{escape k.titleize} ($#{format('%.2f', v.size*100.0 / values.size)}\\%$)
       _
     end
     ret += %Q_
