@@ -107,13 +107,18 @@ _
 
 \\begin{enumerate}
 _
-    developers.sort! do |x,y|
-      y.size <=> x.size
+    devArr = developers.map do |k,v|
+      [
+        v.size, %Q_
+\\item #{escape k.titleize} ($#{format('%.2f', v.size*100.0 / values.size)}\\%$)
+        _
+      ]
     end
-    developers.each do |k,v|
-      ret += %Q_
-      \\item #{escape k.titleize} ($#{format('%.2f', v.size*100.0 / values.size)}\\%$)
-      _
+    devArr.sort! do |x,y|
+      y[0] <=> x[0]
+    end
+    devArr.each do |x|
+      ret += x[1]
     end
     ret += %Q_
 \\end{enumerate}
