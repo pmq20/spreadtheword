@@ -33,8 +33,8 @@ class Spreadtheword::LaTeX
 \\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
 \\renewcommand{\\cftsecfont}{\\rmfamily\\mdseries\\upshape}
 \\renewcommand{\\cftsecpagefont}{\\rmfamily\\mdseries\\upshape} % No bold!
-\\title{#{@title.titleize}}
-\\author{#{@author.titleize}}
+\\title{#{@title}}
+\\author{#{@author}}
 \\begin{document}
 \\maketitle
 \\setcounter{tocdepth}{1}
