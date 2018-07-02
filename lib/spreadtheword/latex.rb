@@ -94,7 +94,7 @@ _
       ret += %Q_
 \\section{Others}
       _
-      ret += printDevelopers(@topics[nil])
+      ret += printDevelopers(topicNil)
     end
     ret
   end
