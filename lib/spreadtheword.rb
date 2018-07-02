@@ -87,6 +87,7 @@ class Spreadtheword
   def run!
     fetchAllLogs
     parseTopics
+    sortTopics
     writer = Spreadtheword::LaTeX.new(@title, @author, @topics, @getTranslation, @gitlab)
     writer.write!
   end
@@ -196,6 +197,17 @@ class Spreadtheword
         payload: payload,
         title: title,
       }
+    end
+  end
+
+  def sortTopics
+    topicsH = @topics
+    @topics = []
+    topicsH.each do |k,v|
+      @topics << [k,v]
+    end
+    @topics.sort! do |x,y|
+      y[1].size <=> x[1].size
     end
   end
 

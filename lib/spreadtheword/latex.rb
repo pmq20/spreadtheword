@@ -48,7 +48,9 @@ class Spreadtheword::LaTeX
 
   def sections
     ret = ''
-    @topics.each do |k,v|
+    @topics.each do |topic|
+      k=topic[0]
+      v=topic[1]
       next if k.nil?
       first = v[0]
       title = k
@@ -87,7 +89,8 @@ _
 \\newpage
       _
     end
-    if @topics[nil]
+    topicNil = @topics.find{|x| x[0].nil?}
+    if topicNil
       ret += %Q_
 \\section{Others}
       _
