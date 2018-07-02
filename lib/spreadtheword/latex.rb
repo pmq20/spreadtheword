@@ -138,7 +138,7 @@ _
         x = reverseH[msg]
         if @gitlab
           ret += %Q_
-\\item \\href{#{@gitlab.scheme}://#{@gitlab.host}/#{x[:commit].gitlabProject}/commit/#{x[:commit].hash}}{#{escape msg}}
+\\item \\href{#{@gitlab.scheme}://#{@gitlab.host}/#{x[:commit].gitlabProject[:namespace]}/#{x[:commit].gitlabProject[:project]}/commit/#{x[:commit].shaHash}}{#{escape msg}}
           _
         else
           ret += %Q_

@@ -132,7 +132,7 @@ class Spreadtheword
       OpenStruct.new.tap do |y|
         y.author = contents[0]
         y.origMsg = contents[1]
-        y.hash = contents[2]
+        y.shaHash = contents[2]
         if @translate && y.origMsg =~ NONASCII
           y.msg = @getTranslation.call(contents[1])
         else
