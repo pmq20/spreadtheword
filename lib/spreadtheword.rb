@@ -83,7 +83,7 @@ class Spreadtheword
       @wrikeCache[wId] = task['data'][0]
 
       comments = @wrike.execute(:get, "https://www.wrike.com/api/v3/tasks/#{taskId}/comments?plainText=true")['data']
-      usersH = {}; comments.map{|x| x['authorId']}.uniq.each{|x| usersH[x] = @wrike.user.details(x)['data']}
+      usersH = {}; comments.map{|x| x['authorId']}.uniq.each{|x| usersH[x] = @wrike.user.details(x)['data'][0]}
 
       @wrikeCache[wId][:spreadthewordPermalink] = permalink
       @wrikeCache[wId][:spreadthewordComments] = comments
