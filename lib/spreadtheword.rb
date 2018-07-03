@@ -83,7 +83,7 @@ class Spreadtheword
       @wrikeCache[wId] = task['data'][0]
 
       comments = @wrike.execute(:get, "https://www.wrike.com/api/v3/tasks/#{taskId}/comments?plainText=true")['data']
-      usersH = {}; comments.map{|x| x['authorId']}.uniq.each{|x| usersH[x] = @wrike.user.details(x)}
+      usersH = {}; comments.map{|x| x['authorId']}.uniq.each{|x| usersH[x] = @wrike.user.details(x)['data']}
 
       @wrikeCache[wId][:spreadthewordPermalink] = permalink
       @wrikeCache[wId][:spreadthewordComments] = comments
@@ -171,14 +171,14 @@ class Spreadtheword
           payload = getWrike($1)
           title = payload['title']
           x.msg = x.msg.gsub(/\{W\d+\}/, '')
-        elsif x.origMsg =~ /#(\d+)\b/
+        elsif x.origMsg =~ /\{*#(\d+)\}*/
           origin = :gitlab
           targetProjectId = "#{x.gitlabProject[:namespace]}/#{x.gitlabProject[:project]}"
           identifier = "#{targetProjectId}##{$1}"
           payload = getGitlab(targetProjectId, $1)
           title = payload[0].title
-          x.msg = x.msg.gsub(/#\d+\b/, '')
-        elsif x.origMsg =~ /\b(\w+)#(\d+)\b/
+          x.msg = x.msg.gsub(/\{*#\d+\}*/, '')
+        elsif x.origMsg =~ /\{*(\w+)#(\d+)\}*/
           origin = :gitlab
           if $1.include?('/')
             targetProjectId = $1.dup
@@ -188,7 +188,7 @@ class Spreadtheword
           identifier = "#{targetProjectId}##{$2}"
           payload = getGitlab(targetProjectId, $2)
           title = payload[0].title
-          x.msg = x.msg.gsub(/\b\w+#\d+\b/, '')
+          x.msg = x.msg.gsub(/\{*\w+#\d+\}*/, '')
         end
       rescue => e
         STDERR.puts "!!! Exception when parsing topic !!! #{e}"
