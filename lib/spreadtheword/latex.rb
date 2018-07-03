@@ -58,8 +58,8 @@ class Spreadtheword::LaTeX
       url = ''
       if :gitlab == first[:origin]
         title = first[:title]
-        description = first[:payload].description
-        url = first[:payload].web_url
+        description = first[:payload][0].description
+        url = first[:payload][0].web_url
       elsif :wrike == first[:origin]
         title = first[:title]
         description = Nokogiri::HTML(first[:payload]['description'].gsub('<br />', "\n\n")).text
@@ -82,6 +82,36 @@ _
 #{escape description}
 
 _
+      end
+
+      if :gitlab == first[:origin]
+        first[:payload][1].each do |x|
+          next if x.system
+          msg = x.body      
+          if @getTranslation && msg =~ Spreadtheword::NONASCII
+            msg = @getTranslation.call(msg)
+          end
+          ret += %Q_
+\\subsubsection{#{escape x.author.name}}
+
+#{escape msg}
+
+_
+        end
+      elsif :wrike == first[:origin]
+        first[:payload][:spreadthewordComments].each do |x|
+          user = first[:payload][:spreadthewordusersH][x['authorId']]
+          msg = x['text']          
+          if @getTranslation && msg =~ Spreadtheword::NONASCII
+            msg = @getTranslation.call(msg)
+          end
+          ret += %Q_
+\\subsubsection{#{escape user['firstName']} #{escape user['lastName']}}
+
+#{escape msg}
+
+_
+        end
       end
 
       ret += printDevelopers(v)

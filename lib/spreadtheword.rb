@@ -63,7 +63,10 @@ class Spreadtheword
   def getGitlab(projectId, issueNumber)
     unless @gitlabCache[projectId] && @gitlabCache[projectId][issueNumber]
       @gitlabCache[projectId] ||= {}
-      @gitlabCache[projectId][issueNumber] = Gitlab.issue(projectId, issueNumber)
+      @gitlabCache[projectId][issueNumber] = [
+        Gitlab.issue(projectId, issueNumber),
+        Gitlab.issue_notes(projectId, issueNumber, per_page: 1000),
+      ]
     end
     return @gitlabCache[projectId][issueNumber]
   end
@@ -78,7 +81,14 @@ class Spreadtheword
       task = @wrike.task.details taskId
       @utils.say "."
       @wrikeCache[wId] = task['data'][0]
+
+      comments = @wrike.execute(:get, "https://www.wrike.com/api/v3/tasks/#{taskId}/comments?plainText=true")['data']
+      usersH = {}; comments.map{|x| x['authorId']}.uniq.each{|x| usersH[x] = @wrike.user.details(x)}
+
       @wrikeCache[wId][:spreadthewordPermalink] = permalink
+      @wrikeCache[wId][:spreadthewordComments] = comments
+      @wrikeCache[wId][:spreadthewordusersH] = usersH
+      
       @utils.say "\n"
     end
     return @wrikeCache[wId]
