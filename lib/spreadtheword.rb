@@ -176,7 +176,7 @@ class Spreadtheword
           targetProjectId = "#{x.gitlabProject[:namespace]}/#{x.gitlabProject[:project]}"
           identifier = "#{targetProjectId}##{$1}"
           payload = getGitlab(targetProjectId, $1)
-          title = payload.title
+          title = payload[0].title
           x.msg = x.msg.gsub(/#\d+\b/, '')
         elsif x.origMsg =~ /\b(\w+)#(\d+)\b/
           origin = :gitlab
@@ -187,7 +187,7 @@ class Spreadtheword
           end
           identifier = "#{targetProjectId}##{$2}"
           payload = getGitlab(targetProjectId, $2)
-          title = payload.title
+          title = payload[0].title
           x.msg = x.msg.gsub(/\b\w+#\d+\b/, '')
         end
       rescue => e
