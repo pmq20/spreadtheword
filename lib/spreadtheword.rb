@@ -161,14 +161,14 @@ class Spreadtheword
           payload = getWrike($1)
           title = payload['title']
           x.msg = x.msg.gsub(/\{W\d+\}/, '')
-        elsif x.origMsg =~ /\{#(\d+)\}/
+        elsif x.origMsg =~ /#(\d+)\b/
           origin = :gitlab
           targetProjectId = "#{x.gitlabProject[:namespace]}/#{x.gitlabProject[:project]}"
           identifier = "#{targetProjectId}##{$1}"
           payload = getGitlab(targetProjectId, $1)
           title = payload.title
-          x.msg = x.msg.gsub(/\{#\d+\}/, '')
-        elsif x.origMsg =~ /\{(.+)#(\d+)\}/
+          x.msg = x.msg.gsub(/#\d+\b/, '')
+        elsif x.origMsg =~ /\b(\w+)#(\d+)\b/
           origin = :gitlab
           if $1.include?('/')
             targetProjectId = $1.dup
@@ -178,7 +178,7 @@ class Spreadtheword
           identifier = "#{targetProjectId}##{$2}"
           payload = getGitlab(targetProjectId, $2)
           title = payload.title
-          x.msg = x.msg.gsub(/\{.+#\d+\}/, '')
+          x.msg = x.msg.gsub(/\b\w+#\d+\b/, '')
         end
       rescue => e
         STDERR.puts "!!! Exception when parsing topic !!! #{e}"
