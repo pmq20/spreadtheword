@@ -1,5 +1,6 @@
 require 'cgi'
 require 'uri'
+require 'yaml'
 require 'ostruct'
 require 'active_support/all'
 require 'wrike3'
@@ -50,14 +51,24 @@ class Spreadtheword
   def configureGoogleTranslate(options)
     @translate = Google::Cloud::Translate.new(key: options.googleTranslateKey)
     translateCache = {}
-    @getTranslation = lambda { |sentence|
-    unless translateCache[sentence]
-      @utils.say "Translating\n-> #{sentence}\n"
-      translateCache[sentence] = CGI.unescapeHTML(@translate.translate(sentence, to: "en").text)
-      @utils.say "<- #{translateCache[sentence]}\n"
+    translateFilePath = File.expand_path('~/.spreadtheword')
+    if File.exists?(translateFilePath)
+      translateCache = YAML.load_file(translateFilePath)
     end
-    translateCache[sentence]
-  }
+    @getTranslation = lambda do |sentence|
+      if translateCache[sentence]
+        @utils.say "Translating (from local cache)\n-> #{sentence}\n"
+        @utils.say "<- #{translateCache[sentence]}\n"
+      else
+        @utils.say "Translating\n-> #{sentence}\n"
+        translateCache[sentence] = CGI.unescapeHTML(@translate.translate(sentence, to: "en").text)
+        @utils.say "<- #{translateCache[sentence]}\n"
+      end
+      translateCache[sentence]
+    end
+    @saveTranslationCache = lambda do
+      File.write(translateFilePath, translateCache.to_yaml)
+    end
   end
 
   def getGitlab(projectId, issueNumber)
@@ -100,6 +111,7 @@ class Spreadtheword
     sortTopics
     writer = Spreadtheword::LaTeX.new(@title, @author, @topics, @getTranslation, @gitlab)
     writer.write!
+    @saveTranslationCache.call
   end
 
   def gitlabSetCurrentProject

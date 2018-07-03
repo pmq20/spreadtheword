@@ -27,6 +27,7 @@
 * Multiple output formats are supported, e.g. LaTeX
 * Integrates with Wrike and GitLab to fetch developement task titles
 * Integrates with Google Translate to automatically translate messages to English
+* Caches Google Translate results on your local disk (`~/.spreadtheword`) so that Google API could incur less fee and it saves your money
 
 ## Commit Message Conventions
 
