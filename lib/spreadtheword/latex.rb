@@ -85,7 +85,7 @@ _
       end
 
       if :gitlab == first[:origin]
-        first[:payload][1].each do |x|
+        first[:payload][1].reverse.each do |x|
           next if x.system
           msg = x.body      
           if @getTranslation && msg =~ Spreadtheword::NONASCII
@@ -99,7 +99,7 @@ _
 _
         end
       elsif :wrike == first[:origin]
-        first[:payload][:spreadthewordComments].each do |x|
+        first[:payload][:spreadthewordComments].reverse.each do |x|
           user = first[:payload][:spreadthewordusersH][x['authorId']]
           msg = x['text']          
           if @getTranslation && msg =~ Spreadtheword::NONASCII
