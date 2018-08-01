@@ -11,37 +11,34 @@ class Spreadtheword::LaTeX
 
   def write!
     puts %Q_
-% !TEX TS-program = pdflatex
-% !TEX encoding = UTF-8 Unicode
+\\documentclass{amsbook}
+\\newtheorem{theorem}{Theorem}[chapter]
+\\newtheorem{lemma}[theorem]{Lemma}
+\\newtheorem{problem}[theorem]{Problem}
+\\theoremstyle{definition}
+\\newtheorem{definition}[theorem]{Definition}
+\\newtheorem{example}[theorem]{Example}
+\\newtheorem{xca}[theorem]{Exercise}
+\\theoremstyle{remark}
+\\newtheorem{remark}[theorem]{Remark}
+\\newtheorem{question}[theorem]{Question}
+\\numberwithin{section}{chapter}
+\\numberwithin{equation}{chapter}
 
-\\documentclass[11pt]{article} % use larger type; default would be 10pt
-\\usepackage{hyperref}
-\\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
-\\usepackage{geometry} % to change the page dimensions
-\\geometry{a4paper} % or letterpaper (US) or a5paper or....
-\\usepackage{graphicx} % support the \\includegraphics command and options
-\\usepackage{booktabs} % for much better looking tables
-\\usepackage{array} % for better arrays (eg matrices) in maths
-\\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
-\\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
-\\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
-\\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
-\\pagestyle{fancy} % options: empty , plain , fancy
-\\renewcommand{\\headrulewidth}{0pt} % customise the layout...
-\\lhead{}\\chead{}\\rhead{}
-\\lfoot{}\\cfoot{\\thepage}\\rfoot{}
-\\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
-\\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
-\\renewcommand{\\cftsecfont}{\\rmfamily\\mdseries\\upshape}
-\\renewcommand{\\cftsecpagefont}{\\rmfamily\\mdseries\\upshape} % No bold!
+\\begin{document}
+\\frontmatter
 \\title{#{@title}}
 \\author{#{@author}}
-\\begin{document}
 \\maketitle
-\\setcounter{tocdepth}{1}
+\\setcounter{page}{4}
+\\setcounter{tocdepth}{0}
 \\tableofcontents
-\\newpage
+\\mainmatter
 #{sections}
+\\backmatter
+\\appendix
+\\chapter{Document Version}
+#{Time.now.to_s.split(' ')[0..1].map{|x| "\\[#{x}\\]"}.join("\n")}
 \\end{document}
     _
   end
@@ -66,9 +63,9 @@ class Spreadtheword::LaTeX
         url = first[:payload][:spreadthewordPermalink]
       end
       ret += %Q_
-\\section{#{escape title.titleize}}
+\\chapter{#{escape title.titleize}}
 
-\\subsection{Background}
+\\section{Background}
 
 \\url{#{escape url}}
 _
@@ -77,7 +74,7 @@ _
         description.strip!
         description[0] = description[0].upcase
         ret += %Q_
-\\subsection{Description}
+\\section{Description}
 
 #{escape description}
 
@@ -92,7 +89,7 @@ _
             msg = @getTranslation.call(msg)
           end
           ret += %Q_
-\\subsubsection{#{escape x.author.name}}
+\\subsection{#{escape x.author.name}}
 
 #{escape msg}
 
@@ -106,7 +103,7 @@ _
             msg = @getTranslation.call(msg)
           end
           ret += %Q_
-\\subsubsection{#{escape user['firstName']} #{escape user['lastName']}}
+\\subsection{#{escape user['firstName']} #{escape user['lastName']}}
 
 #{escape msg}
 
@@ -115,14 +112,11 @@ _
       end
 
       ret += printDevelopers(v)
-      ret += %Q_
-\\newpage
-      _
     end
     topicNil = @topics.find{|x| x[0].nil?}
     if topicNil
       ret += %Q_
-\\section{Others}
+\\chapter{Others}
       _
       ret += printDevelopers(topicNil[1])
     end
@@ -136,7 +130,7 @@ _
       developers[x[:commit].author] << x
     end
     ret = %Q_
-\\subsection{Developers}
+\\section{Developers}
 
 \\begin{enumerate}
 _
@@ -160,7 +154,7 @@ _
       k = dev[2]
       v = dev[3]
       ret += %Q_
-\\subsection{#{escape k.titleize}'s Commit Messages}
+\\section{#{escape k.titleize}'s Commit Messages}
 \\begin{enumerate}
       _
       reverseH = {}
@@ -193,6 +187,6 @@ _
     if @getTranslation && str =~ Spreadtheword::NONASCII
       str = @getTranslation.call(str)
     end
-    str.gsub(Spreadtheword::NONASCII, '').gsub('\\', '\\textbackslash ').gsub('&', '\\\&').gsub('%', '\\%').gsub('$', '\\$').gsub('#', '\\#').gsub('_', '\\_').gsub('{', '\\{').gsub('}', '\\}').gsub('~', '\\textasciitilde ').gsub('^', '\\textasciicircum ')
+    str.gsub(Spreadtheword::NONASCII, '').gsub('\\', '\\textbackslash ').gsub('&', '\\\&').gsub('%', '\\%').gsub('$', '\\$').gsub('#', '\\#').gsub('_', '\\_').gsub('{', '\\{').gsub('}', '\\}').gsub('~', '\\textasciitilde ').gsub('^', '\\textasciicircum ').gsub('<', '\\textless ').gsub('>', '\\textgreater ')
   end
 end

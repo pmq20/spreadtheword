@@ -16,7 +16,7 @@ class Spreadtheword
 
   def initialize(projects, options)
     @projects = projects.any? ? projects : [Dir.pwd]
-    @title = options.title ? options.title : 'Relase Notes'
+    @title = options.title ? options.title : 'Release Notes'
     @author = options.author ? options.author : gitUserName
     @since = options.since
 
@@ -111,7 +111,7 @@ class Spreadtheword
     sortTopics
     writer = Spreadtheword::LaTeX.new(@title, @author, @topics, @getTranslation, @gitlab)
     writer.write!
-    @saveTranslationCache.call
+    @saveTranslationCache.call if @saveTranslationCache
   end
 
   def gitlabSetCurrentProject
