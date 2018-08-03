@@ -41,9 +41,9 @@ class Spreadtheword::LaTeX
 \\backmatter
 \\appendix
 \\chapter{Document Version}
-\begin{center}
-\today
-\end{center}
+\\begin{center}
+\\today
+\\end{center}
 \\end{document}
     _
   end
@@ -72,9 +72,9 @@ class Spreadtheword::LaTeX
 
 \\section{Background}
 
-\begin{center}
+\\begin{center}
 \\url{#{escape url}}
-\end{center}
+\\end{center}
 
 _
 
