@@ -12,6 +12,9 @@ class Spreadtheword::LaTeX
   def write!
     puts %Q_
 \\documentclass{amsbook}
+
+\\usepackage{hyperref}
+
 \\newtheorem{theorem}{Theorem}[chapter]
 \\newtheorem{lemma}[theorem]{Lemma}
 \\newtheorem{problem}[theorem]{Problem}
@@ -38,7 +41,9 @@ class Spreadtheword::LaTeX
 \\backmatter
 \\appendix
 \\chapter{Document Version}
-#{Time.now.to_s.split(' ')[0..1].map{|x| "\\[#{x}\\]"}.join("\n")}
+\begin{center}
+\today
+\end{center}
 \\end{document}
     _
   end
@@ -67,7 +72,10 @@ class Spreadtheword::LaTeX
 
 \\section{Background}
 
+\begin{center}
 \\url{#{escape url}}
+\end{center}
+
 _
 
       if description.present?
