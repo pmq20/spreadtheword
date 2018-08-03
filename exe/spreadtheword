@@ -81,6 +81,10 @@ OptionParser.new do |opts|
     options.title = x
   end
 
+  opts.on("--until=TAG/COMMIT-SHA1", 'Specifies the end to which the git commits will be fetched. Default: master') do |x|
+    options.until = x
+  end
+
   opts.on("-v", "--version", "Prints the version of spreadtheword and exit") do
     puts ::Spreadtheword::VERSION
     exit 0

@@ -52,6 +52,7 @@
           --quiet                      If present, spreadtheword would not output anything to stderr.
           --since=TAG/COMMIT-SHA1      Specifies the begining from which the git commits will be fetched. Default: the first commit
           --title=STRING               Specifies the title of the output document. Default: "Relase Notes"
+          --until=TAG/COMMIT-SHA1      Specifies the end to which the git commits will be fetched. Default: master
       -v, --version                    Prints the version of spreadtheword and exit
           --wrike-token=STRING         Specifies the access token of your Wrike API app.
 
@@ -67,6 +68,7 @@
       /projects/X                                     \
       /projects/Y                                     \
       --since=v1.5                                    \
+      --until=origin/releasing                        \
       --title="Your Project v1.6 Release Notes"       \
       --author="Your Company, Inc."                   \
       --google-translate-key="XXX"                    \

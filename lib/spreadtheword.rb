@@ -19,6 +19,7 @@ class Spreadtheword
     @title = options.title ? options.title : 'Release Notes'
     @author = options.author ? options.author : gitUserName
     @since = options.since
+    @until = options.until
 
     configureGitlab(options) if options.gitlabToken
     configureWrike(options) if options.wrikeToken
@@ -142,7 +143,11 @@ class Spreadtheword
   def fetchLogs
     cmd = %Q{git log --pretty=format:"%an#{CONNECTOR}%s#{CONNECTOR}%H"}
     if @since
-      cmd = %Q{#{cmd} #{@since}..master}
+      if @until
+        cmd = %Q{#{cmd} #{@since}..#{@until}}
+      else
+        cmd = %Q{#{cmd} #{@since}..master}
+      end
     end
     logs = `#{cmd}`.to_s.split("\n")
     logs.delete_if do |x|
