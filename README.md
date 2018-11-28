@@ -33,7 +33,7 @@
 
 - `{#1}` or `#1` means issue #1 of Gitlab. Eg. `{#63} add backend code for fields` or `fix #23`;
 - `{prj#1}` or `prj#1` means issue #1 of Gitlab project `prj`. Eg. `{UI#1} add code for forms` or `fix UI#23`;
-- `{W1}` menas Wrike task `XXX` as in Wrike's permalink `https://www.wrike.com/open.htm?id=XXX`. Eg. `{W4123780} fix config files`.
+- `{W1}` means Wrike task `XXX` as in Wrike's permalink `https://www.wrike.com/open.htm?id=XXX`. Eg. `{W4123780} fix config files`.
 
 ## Install
 
